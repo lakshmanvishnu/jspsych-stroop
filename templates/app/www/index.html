@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
     <title>jsPsych Cordova App</title>
     <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unkpg.com/@jspsych/plugin-html-keyboard-response"></script>
     <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
     <div id="jspsych-target"></div>
     <script src="cordova.js"></script>
-    <script src="js/experiment.js"></script>
+    <script type="module" src="js/index.js"></script>
 </body>
 </html>
