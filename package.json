@@ -1,0 +1,19 @@
+{
+  "name": "@jspsych/new-app",
+  "version": "1.0.0",
+  "description": "Create a new jsPsych Cordova app",
+  "bin": {
+    "create-jspsych-app": "./bin/index.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "templates"
+  ],
+  "dependencies": {
+    "fs-extra": "^11.1.0",
+    "inquirer": "^8.2.5",
+    "chalk": "^4.1.2",
+    "commander": "^9.4.1"
+  }
+}
