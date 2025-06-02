@@ -1,42 +1,55 @@
-/* global jsPsych */
+// Main experiment runner
+import { run as runProfileExperiment, checkUserId } from './experiments/profile/index.js';
+import { run as runSampleExperiment } from './experiments/sample-experiment/index.js';
 
-// Wait for device ready if running in Cordova
 document.addEventListener('deviceready', onDeviceReady, false);
 
-// Also run if we're in a browser
 if (!window.cordova) {
     onDeviceReady();
 }
 
-function onDeviceReady() {
-    // Initialize jsPsych
+async function onDeviceReady() {
+    // Check if user already has an ID
+    const existingUserId = await checkUserId();
+    
     const jsPsych = initJsPsych({
         on_finish: function() {
             jsPsych.data.displayData();
         }
     });
 
-    // Create timeline
+    // Combine all experiments
     const timeline = [];
-
-    // Welcome screen
-    const welcome = {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: '<h1>Welcome to jsPsych!</h1><p>Press any key to begin.</p>'
-    };
-    timeline.push(welcome);
-
-    // Instructions
-    const instructions = {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: `
-            <h2>Instructions</h2>
-            <p>This is a sample jsPsych experiment running in Cordova.</p>
-            <p>Press any key to continue.</p>
-        `
-    };
-    timeline.push(instructions);
-
-    // Run the experiment
+    
+    // Only show profile screen if user doesn't have an ID
+    if (!existingUserId) {
+        console.log('No existing user ID found, showing profile screen');
+        timeline.push(...runProfileExperiment(jsPsych));
+    } else {
+        console.log('User ID already exists:', existingUserId);
+        // Add the existing user ID to the data
+        jsPsych.data.addProperties({
+            userId: existingUserId,
+            profileCompleted: true
+        });
+        
+        // Optional: Show a brief welcome back message
+        const welcomeBack = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+                <h2>Welcome Back!</h2>
+                <p>Your User ID: <strong style="font-family: monospace;">${existingUserId}</strong></p>
+                <p>Press any key to continue.</p>
+            `,
+            choices: "ALL_KEYS",
+            trial_duration: 3000 // Auto-advance after 3 seconds
+        };
+        timeline.push(welcomeBack);
+    }
+    
+    // Add your main experiments here
+    timeline.push(...runSampleExperiment(jsPsych));
+    
+    // Run the combined timeline
     jsPsych.run(timeline);
 }
