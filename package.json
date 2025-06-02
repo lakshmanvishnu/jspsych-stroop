@@ -1,19 +1,26 @@
 {
-  "name": "@jspsych/new-app",
+  "name": "jspsych-cordova-app",
   "version": "1.0.0",
-  "description": "Create a new jsPsych Cordova app",
+  "description": "A jsPsych experiment app built with Cordova",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jspsych",
+    "cordova",
+    "experiment"
+  ],
+  "author": "",
+  "license": "MIT",
   "bin": {
     "create-jspsych-app": "./bin/index.js"
   },
-  "files": [
-    "bin",
-    "lib",
-    "templates"
-  ],
   "dependencies": {
-    "fs-extra": "^11.1.0",
-    "inquirer": "^8.2.5",
     "chalk": "^4.1.2",
-    "commander": "^9.4.1"
+    "commander": "^14.0.0",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.6.3",
+    "path": "^0.12.7"
   }
 }

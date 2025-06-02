@@ -15,7 +15,7 @@ program
           type: 'input',
           name: 'projectName',
           message: 'What is your project name?',
-          default: 'my-jspsych-app'
+          default: 'new-jspsych-app'
         }
       ]);
       projectName = answers.projectName;
