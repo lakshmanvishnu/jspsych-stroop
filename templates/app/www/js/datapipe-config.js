@@ -195,7 +195,7 @@ export function createCompletionScreen(jsPsych, userId) {
       `;
     },
     choices: ['Continue'],
-    button_html: '<button class="jspsych-btn" style="display: none;">%choice%</button>',
+    button_html: (choice) => `<button class="jspsych-btn" style="display: none;">${choice}</button>`,
     on_load: async function() {
       console.log('Completion screen on_load triggered');
       
