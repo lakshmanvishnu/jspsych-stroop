@@ -1,11 +1,9 @@
 // DataPipe integration module
 export const DataPipeConfig = {
   // Replace with your actual DataPipe experiment ID
-  experimentId: 'YOUR_EXPERIMENT_ID_HERE',
+  experimentId: 'rujuPr54kiXn',
   // DataPipe API endpoint
   apiUrl: 'https://pipe.jspsych.org/api/data/',
-  // Optional: Add a completion code if needed
-  completionCode: 'COMPLETION-CODE-HERE'
 };
 
 // Function to send data to DataPipe
@@ -29,11 +27,12 @@ export async function sendToDataPipe(data, userId) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': '*/*'
       },
       body: JSON.stringify({
         experimentID: DataPipeConfig.experimentId,
-        data: dataToSend
+        filename:"TEST.csv",
+        data: dataAsString,
       })
     });
 
@@ -141,7 +140,6 @@ export function createCompletionScreen(jsPsych, userId) {
         statusDiv.innerHTML = `
           <div style="color: green; font-size: 48px;">✓</div>
           <p style="color: green; font-weight: bold;">Data submitted successfully!</p>
-          ${DataPipeConfig.completionCode ? `<p>Completion code: <strong>${DataPipeConfig.completionCode}</strong></p>` : ''}
         `;
       } else {
         statusDiv.innerHTML = `
