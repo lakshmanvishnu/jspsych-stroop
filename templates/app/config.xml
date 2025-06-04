@@ -14,4 +14,24 @@
         <preference name="android-compileSdkVersion" value="35" />
         <preference name="android-targetSdkVersion" value="34" />
     </platform>
+
+    <!-- Add these lines to your config.xml -->
+<preference name="AndroidPersistentFileLocation" value="Internal" />
+
+<!-- Permissions -->
+<platform name="android">
+    <config-file parent="/*" target="AndroidManifest.xml">
+        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        <uses-permission android:name="android.permission.VIBRATE" />
+    </config-file>
+</platform>
+
+<platform name="ios">
+    <config-file parent="UIBackgroundModes" target="*-Info.plist">
+        <array>
+            <string>fetch</string>
+            <string>remote-notification</string>
+        </array>
+    </config-file>
+</platform>
 </widget>
