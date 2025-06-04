@@ -1,7 +1,9 @@
+export const DataPipeEnabled = TRUE;
+
 // DataPipe integration module
 export const DataPipeConfig = {
   // Replace with your actual DataPipe experiment ID
-  experimentId: 'rujuPr54kiXn',
+  experimentId: 'EXPERIMENT-ID',
   // DataPipe API endpoint
   apiUrl: 'https://pipe.jspsych.org/api/data/',
 };
