@@ -1,5 +1,5 @@
-// Set to false to disable sending data to OSF via DataPipe
-export const DataPipeEnabled = true;
+// Set to true to enable sending data to OSF via DataPipe
+export const DataPipeEnabled = false;
 
 // DataPipe integration module
 export const DataPipeConfig = {
