@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.example.mytestapp4" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>my-test-app-4</name>
+<widget id="com.example.jspsychapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>jsPsych App</name>
     <description>A jsPsych experiment app</description>
     <author email="dev@example.com" href="http://example.com">
         jsPsych Developer
