@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.example.jspsychapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>jsPsych App</name>
+<widget id="com.example.mytestapp4" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>my-test-app-4</name>
     <description>A jsPsych experiment app</description>
     <author email="dev@example.com" href="http://example.com">
         jsPsych Developer
@@ -10,28 +10,19 @@
     <allow-intent href="https://*/*" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="22" />
+    
+    <!-- Add this for file storage -->
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+    
     <platform name="android">
         <preference name="android-compileSdkVersion" value="35" />
         <preference name="android-targetSdkVersion" value="34" />
+        
+        <!-- Android permissions are automatically added by the plugins -->
+        <!-- No need to manually add them here -->
     </platform>
-
-    <!-- Add these lines to your config.xml -->
-<preference name="AndroidPersistentFileLocation" value="Internal" />
-
-<!-- Permissions -->
-<platform name="android">
-    <config-file parent="/*" target="AndroidManifest.xml">
-        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-        <uses-permission android:name="android.permission.VIBRATE" />
-    </config-file>
-</platform>
-
-<platform name="ios">
-    <config-file parent="UIBackgroundModes" target="*-Info.plist">
-        <array>
-            <string>fetch</string>
-            <string>remote-notification</string>
-        </array>
-    </config-file>
-</platform>
+    
+    <platform name="ios">
+        <!-- iOS-specific settings -->
+    </platform>
 </widget>
