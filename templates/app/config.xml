@@ -8,8 +8,6 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <access origin="*" />
-    <allow-navigation href="*"/>
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="22" />
     
@@ -41,5 +39,7 @@
     <preference name="BackupWebStorage" value="local" />
     
     <!-- Allow access to external resources -->
+    <access origin="*" />
+    <allow-navigation href="*"/>
 </platform>
 </widget>
