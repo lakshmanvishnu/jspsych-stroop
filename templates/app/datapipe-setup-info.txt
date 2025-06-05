@@ -14,9 +14,8 @@
 
 ```javascript
 export const DataPipeConfig = {
-  experimentId: 'YOUR_ACTUAL_EXPERIMENT_ID_HERE', // Replace this!
+  experimentId: 'EXPERIMENT_ID', // Replace this!
   apiUrl: 'https://pipe.jspsych.org/api/data/',
-  completionCode: 'STUDY-COMPLETE-2024' // Optional
 };
 ```
 
