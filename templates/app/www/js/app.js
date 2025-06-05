@@ -273,6 +273,37 @@ async function initializeApp() {
         });
     } else {
         // No DataPipe - simple completion screen
+        // Add this to your timeline for testing
+timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+        <h3>Direct Notification Test</h3>
+        <p>Click the button below to schedule a test notification.</p>
+        <button onclick="testNotification()" style="padding: 10px 20px; margin: 10px;">
+            Test Notification Now
+        </button>
+    `,
+    choices: ['Continue']
+});
+
+// Add this function to the global scope
+window.testNotification = function() {
+    console.log('Testing notification...');
+    
+    if (!window.cordova || !window.cordova.plugins || !window.cordova.plugins.notification) {
+        alert('Notification plugin not available');
+        return;
+    }
+    
+    cordova.plugins.notification.local.schedule({
+        title: 'Direct Test',
+        text: 'You clicked the button!',
+        foreground: true,
+        trigger: { in: 3, unit: 'second' }
+    });
+    
+    alert('Notification scheduled for 3 seconds from now. Put app in background to see it!');
+};
         timeline.push({
             type: jsPsychHtmlButtonResponse,
             stimulus: function() {
