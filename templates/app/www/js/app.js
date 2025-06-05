@@ -1,4 +1,4 @@
-// app.js - Main application logic that loads experiments dynamically
+// app.js - Main application logic with notification support
 
 // List of experiments to load
 const EXPERIMENTS = [
@@ -6,9 +6,89 @@ const EXPERIMENTS = [
     'sample-experiment'
 ];
 
+// Function to setup notifications
+function setupNotifications(userId) {
+    if (!window.cordova || !window.cordova.plugins || !window.cordova.plugins.notification) {
+        console.log('Notification plugin not available');
+        return;
+    }
+    
+    const notificationsSetup = localStorage.getItem('notificationsSetup');
+    
+    if (!notificationsSetup) {
+        console.log('Setting up notifications for the first time...');
+        
+        cordova.plugins.notification.local.hasPermission(function(granted) {
+            console.log('Permission granted: ' + granted);
+            
+            if (!granted) {
+                cordova.plugins.notification.local.requestPermission(function(granted) {
+                    console.log('Permission request result: ' + granted);
+                    if (granted) {
+                        scheduleNotifications(userId);
+                    }
+                });
+            } else {
+                scheduleNotifications(userId);
+            }
+        });
+    } else {
+        console.log('Notifications already set up');
+    }
+}
+
+function scheduleNotifications(userId) {
+    console.log('Scheduling notifications...');
+    
+    // Use the notification manager
+    if (window.notificationManager) {
+        // Cancel any existing notifications first
+        window.notificationManager.cancelAllNotifications();
+        
+        // Schedule a test notification
+        window.notificationManager.scheduleNotification({
+            title: 'Test Notification',
+            text: 'Notifications are working!',
+            trigger: { at: new Date(Date.now() + 10000) }
+        });
+        
+        // Schedule recurring notifications
+        window.notificationManager.scheduleRecurringNotifications({
+            title: `Hi ${userId}, time for your experiment!`,
+            text: 'Your jsPsych task is ready',
+            interval: 1 // Every minute for testing
+        });
+        
+        // Schedule multiple notifications
+        const schedules = [];
+        for (let i = 1; i <= 5; i++) {
+            schedules.push({
+                title: `Reminder ${i}`,
+                text: `This is notification ${i} - scheduled for ${i} minute(s) from now`,
+                time: new Date(Date.now() + (i * 60000))
+            });
+        }
+        window.notificationManager.scheduleMultipleNotifications(schedules);
+        
+        localStorage.setItem('notificationsSetup', 'true');
+        console.log('Notification setup complete');
+    }
+}
+
 // Initialize the app
 async function initializeApp() {
     console.log('Initializing jsPsych app...');
+    
+    // Setup notification handlers
+    if (window.cordova && window.cordova.plugins && window.cordova.plugins.notification) {
+        cordova.plugins.notification.local.on('click', function(notification) {
+            console.log('Notification clicked:', notification);
+        });
+        
+        cordova.plugins.notification.local.on('trigger', function(notification) {
+            console.log('Notification triggered:', notification);
+        });
+    }
     
     // Load all experiments
     await window.ExperimentLoader.loadExperiments(EXPERIMENTS);
@@ -49,7 +129,10 @@ async function initializeApp() {
                 if (profileData) {
                     userId = profileData.userId;
                     console.log('Captured userId:', userId);
+                    localStorage.setItem('jspsych_userId', userId);
                     jsPsych.data.addProperties({ userId: userId });
+                    // Setup notifications for new user
+                    setupNotifications(userId);
                 }
             }
         });
@@ -61,6 +144,9 @@ async function initializeApp() {
             profileCompleted: true
         });
         
+        // Ensure notifications are set up
+        setupNotifications(existingUserId);
+        
         timeline.push({
             type: jsPsychHtmlButtonResponse,
             stimulus: `<h2>Welcome Back!</h2>
@@ -69,6 +155,22 @@ async function initializeApp() {
             choices: ['Continue']
         });
     }
+    
+    // Add notification test screen
+    timeline.push({
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+            <h3>Notification Test</h3>
+            <p>Notifications have been scheduled. You should receive:</p>
+            <ul style="text-align: left;">
+                <li>A test notification in 10 seconds</li>
+                <li>5 notifications over the next 5 minutes</li>
+                <li>Recurring notifications every minute</li>
+            </ul>
+            <p>Check your notification bar!</p>
+        `,
+        choices: ['Continue']
+    });
     
     // Add all other experiments
     for (const [name, experiment] of Object.entries(experiments)) {
