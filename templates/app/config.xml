@@ -28,6 +28,10 @@
     <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="AllowUntrustedCerts" value="true" />
+    <preference name="InterceptRemoteRequests" value="all" />
+    <preference name="allowFileAccessFromFileURLs" value="true" />
+    <preference name="allowUniversalAccessFromFileURLs" value="true" />
     <preference name="StatusBarStyle" value="lightcontent" />
     
     <!-- Important for file access -->
