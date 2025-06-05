@@ -2,21 +2,28 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://unpkg.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; connect-src 'self' https://pipe.jspsych.org;">
     <title>jsPsych Cordova App</title>
+    
+    <!-- Load jsPsych from CDN -->
     <script src="https://unpkg.com/jspsych@8.2.1"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response"></script>
     <script src="https://unpkg.com/@jspsych/plugin-call-function"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form"></script>
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+    
     <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
     <div id="jspsych-target"></div>
+    
+    <!-- Cordova script -->
     <script src="cordova.js"></script>
-    <script type="module" src="js/datapipe-config.js"></script>
-    <script type="module" src="js/index.js"></script>
+    
+    <!-- Load app with proper module handling -->
+    <script src="js/app-loader.js"></script>
 </body>
 </html>

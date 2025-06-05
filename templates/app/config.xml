@@ -22,7 +22,20 @@
         <!-- No need to manually add them here -->
     </platform>
     
-    <platform name="ios">
-        <!-- iOS-specific settings -->
-    </platform>
+<platform name="ios">
+    <!-- iOS-specific settings -->
+    <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    
+    <!-- Important for file access -->
+    <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="BackupWebStorage" value="local" />
+    
+    <!-- Allow access to external resources -->
+    <allow-navigation href="*" />
+    <access origin="*" />
+</platform>
 </widget>
