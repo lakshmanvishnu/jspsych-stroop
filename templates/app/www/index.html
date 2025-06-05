@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>jsPsych Cordova App</title>
-   
+    
     <!-- jsPsych and plugins -->
     <script src="https://unpkg.com/jspsych@8.2.1"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-call-function@2.0.0"></script>
-   
+    
     <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet">
     <style>
         body {
@@ -26,16 +26,16 @@
 </head>
 <body>
     <div id="jspsych-target"></div>
-   
+    
     <!-- Cordova -->
     <script src="cordova.js"></script>
-   
-    <!-- Core utilities (optional, for DataPipe etc) -->
-    <script src="js/app-main.js"></script>
-   
+    
+    <!-- DataPipe configuration -->
+    <script src="js/datapipe-config.js"></script>
+    
     <!-- Experiment loader -->
     <script src="js/experiment-loader.js"></script>
-   
+    
     <!-- Main app -->
     <script src="js/app.js"></script>
 </body>
