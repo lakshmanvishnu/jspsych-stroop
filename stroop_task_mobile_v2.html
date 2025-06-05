@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Stroop Task Experiment</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-instructions@2.0.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        #jspsych-target {
+            /* Center content */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .jspsych-content {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Center content and move buttons below */
+        .jspsych-content-wrapper {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            min-height: 100vh !important;
+            padding: 20px !important;
+        }
+
+        .jspsych-content {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            width: 100% !important;
+            max-width: none !important;
+        }
+
+        /* Button styling */
+        .jspsych-btn {
+            font-size: 18px !important;
+            font-weight: bold !important;
+            padding: 20px 15px !important;
+            border: 2px solid #333 !important;
+            border-radius: 8px !important;
+            min-height: 60px !important;
+            cursor: pointer !important;
+        }
+
+        /* Single button for instructions/continue screens */
+        .jspsych-btn-group.single-button {
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        /* Continue/instruction buttons */
+        .jspsych-btn.continue-btn {
+            background-color: #4f46e5 !important;
+            color: white !important;
+            border-color: #3730a3 !important;
+            padding: 15px 30px !important;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .jspsych-btn {
+                min-height: 70px !important;
+                font-size: 16px !important;
+                padding: 25px 10px !important;
+            }
+
+            .jspsych-btn-group {
+                gap: 40px !important;
+                max-width: 400px !important;
+                margin: 40px auto 40px 60px !important;
+                /* ADD THIS LINE */
+                display: grid !important;
+                /* ADD THIS LINE */
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
+
+        .jspsych-btn {
+            font-size: 18px !important;
+            font-weight: bold !important;
+            padding: 15px 25px !important;
+            margin: 10px !important;
+            border: 2px solid #333 !important;
+            border-radius: 8px !important;
+            min-width: 100px !important;
+        }
+
+        .stimulus {
+            font-size: 60px;
+            font-weight: bold;
+            margin: 20px 0;
+            /* Add some margin around stimulus */
+        }
+
+        .instructions-container {
+            max-width: 700px;
+            margin: 20px auto;
+            text-align: left;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .instructions-container p,
+        .instructions-container li {
+            font-size: 18px;
+            /* Slightly larger instruction font */
+        }
+
+        .color-example-container {
+            display: flex;
+            justify-content: space-around;
+            /* Distribute examples evenly */
+            margin: 20px 0;
+            flex-wrap: wrap;
+            /* Allow wrapping on smaller screens */
+        }
+
+        .color-example {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            min-width: 120px;
+            /* Ensure examples have some width */
+            text-align: center;
+        }
+
+        .color-example span {
+            display: block;
+            /* Make span take full width for centering */
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .debrief-results {
+            text-align: left;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .debrief-results h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .debrief-results p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .key-mapping {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body></body>
+<div id="jspsych-target"></div>
+<script>
+    // Initialize jsPsych
+    const jsPsych = initJsPsych({
+        on_finish: function (data) {
+            jsPsych.data.displayData();
+        },
+        show_progress_bar: false,
+    });
+
+    // --- Configuration ---
+    /* Define your word-color combinations in timeline variables */
+    var test_stimuli = [
+        {
+            word: "RED",
+            color: "red",
+            correct_response: 0,
+            congruent: true
+        },
+        {
+            word: "RED",
+            color: "blue",
+            correct_response: 2,
+            congruent: false
+        },
+        {
+            word: "RED",
+            color: "yellow",
+            correct_response: 3,
+            congruent: false
+        },
+        {
+            word: "RED",
+            color: "green",
+            correct_response: 1,
+            congruent: false
+        },
+        {
+            word: "GREEN",
+            color: "red",
+            correct_response: 0,
+            congruent: false
+        },
+        {
+            word: "GREEN",
+            color: "blue",
+            correct_response: 2,
+            congruent: false
+        },
+        {
+            word: "GREEN",
+            color: "yellow",
+            correct_response: 3,
+            congruent: false
+        },
+        {
+            word: "GREEN",
+            color: "green",
+            correct_response: 3,
+            congruent: true
+        },
+        {
+            word: "BLUE",
+            color: "red",
+            correct_response: 0,
+            congruent: false
+        },
+        {
+            word: "BLUE",
+            color: "blue",
+            correct_response: 2,
+            congruent: true
+        },
+        {
+            word: "BLUE",
+            color: "yellow",
+            correct_response: 3,
+            congruent: false
+        },
+        {
+            word: "BLUE",
+            color: "green",
+            correct_response: 1,
+            congruent: false
+        },
+        {
+            word: "YELLOW",
+            color: "red",
+            correct_response: 0,
+            congruent: false
+        },
+        {
+            word: "YELLOW",
+            color: "blue",
+            correct_response: 2,
+            congruent: false
+        },
+        {
+            word: "YELLOW",
+            color: "yellow",
+            correct_response: 3,
+            congruent: true
+        },
+        {
+            word: "YELLOW",
+            color: "green",
+            correct_response: 1,
+            congruent: false
+        }
+    ];
+    const COLORS_DATA = [
+        { name: 'RED', hex: 'red', key: 'r' },
+        { name: 'GREEN', hex: 'green', key: 'g' },
+        { name: 'BLUE', hex: 'blue', key: 'b' },
+        { name: 'YELLOW', hex: 'yellow', key: 'y' }
+    ];
+
+    const TRIAL_TIMEOUT = 3000; // 3 seconds
+    const FIXATION_MIN_DURATION = 300; // ms
+    const FIXATION_MAX_DURATION = 1000; // ms
+
+    const NUM_MAIN_CONGRUENT_REPETITIONS = 6; // Each congruent type repeated 6 times (4*6 = 24 total)
+    const NUM_MAIN_INCONGRUENT_REPETITIONS = 2; // Each unique incongruent type repeated 2 times (12*2 = 24 total)
+
+    // --- Timeline ---
+    let timeline = [];
+
+    // --- Welcome Screen ---
+    const welcome = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+                <div class="instructions-container">
+                    <h1>Welcome to the Stroop Task!</h1>
+                    <p>In this experiment, you will see words printed in different colors.</p>
+                    <p>Your task is to identify the <strong>color of the ink</strong> the word is printed in, NOT the word itself.</p>
+                    <p>Please respond as quickly and accurately as possible.</p>
+                    <p>Press any key to continue to the instructions.</p>
+                </div>
+            `,
+        choices: ['Continue'],
+        post_trial_gap: 500
+    };
+
+    timeline.push(welcome);
+
+    // --- Instructions Screen ---
+    let instructions_html = `
+            <div class="instructions-container">
+                <h2>Instructions</h2>
+                <p>You will see a word (e.g., "RED", "BLUE") displayed in one of four ink colors: red, green, blue, or yellow.</p>
+                <p>Your task is to tap the button corresponding to the <strong>INK COLOR</strong> of the word, ignoring what the word says.</p>
+                <p>Tap the colored buttons that will appear below each word:</p>
+                <div class="color-example-container">
+        `;
+    COLORS_DATA.forEach(color => {
+        instructions_html += `
+                <div class="color-example">
+                    <span style="color:${color.hex};">${color.name}</span>
+                    Press <span class="key-mapping">'${color.key.toUpperCase()}'</span>
+                </div>
+            `;
+    });
+    instructions_html += `
+                </div>
+                <p>For example, if you see the word <strong style="color:blue;">RED</strong> (written in BLUE ink), you should tap the BLUE button.</p>
+                <p>If you see the word <strong style="color:green;">GREEN</strong> (written in GREEN ink), you should tap the GREEN button.</p>
+                <p>There will be a short practice session first.</p>
+                <p>Press any key to begin the practice.</p>
+            </div>
+        `;
+    const instructions = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: instructions_html,
+        choices: ['Begin Practice'],
+        post_trial_gap: 500
+    };
+    timeline.push(instructions);
+
+    // --- Fixation Cross ---
+    var fixation = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: '<div style="font-size:60px;">+</div>',
+        choices: "NO_KEYS",
+        trial_duration: function () {
+            return jsPsych.randomization.randomInt(FIXATION_MIN_DURATION, FIXATION_MAX_DURATION);
+        },
+        data: {
+            task: 'fixation'
+        }
+    };
+
+    // Define individual practice trials (no procedure needed)
+    var practice_trial_1 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '<div style="font-size: 48px; color: red; font-weight: bold;">RED</div>',
+        choices: ['RED', 'GREEN', 'BLUE', 'YELLOW'],
+        button_html: (choice) => `<div style="border: 3px solid #333; width: 150px; height: 60px; margin: 50px 20px 20px 20px; background-color: ${choice}; border-radius: 8px; cursor: pointer;">${choice}</div>`,
+        grid_rows: 2,
+        grid_columns: 2,
+        data: { task: 'practice', correct_response: 0, word: 'RED', color: 'red' },
+        on_finish: function (data) {
+            data.correct = (data.response === data.correct_response);
+        }
+    };
+
+    var practice_feedback_1 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function () {
+            var last_trial = jsPsych.data.get().last(1).values()[0];
+            if (last_trial.correct) {
+                return '<div style="font-size: 24px; color: green;"><p>✓ CORRECT! Press any key to continue.</p></div>';
+            } else {
+                return '<div style="font-size: 24px; color: red;"><p>✗ INCORRECT. The correct key was R for RED ink. Press any key to continue.</p></div>';
+            }
+        },
+        choices: ['Continue']
+    };
+
+    var practice_trial_2 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '<div style="font-size: 48px; color: blue; font-weight: bold;">BLUE</div>',
+        choices: ['RED', 'GREEN', 'BLUE', 'YELLOW'],
+        button_html: (choice) => `<div style="border: 3px solid #333; width: 150px; height: 60px; margin: 20px; background-color: ${choice}; border-radius: 8px; cursor: pointer;">${choice}</div>`,
+        grid_rows: 2,
+        grid_columns: 2,
+        data: { task: 'practice', correct_response: 2, word: 'BLUE', color: 'blue' },
+        on_finish: function (data) {
+            data.correct = (data.response === data.correct_response);
+        }
+    };
+
+    var practice_feedback_2 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function () {
+            var last_trial = jsPsych.data.get().last(1).values()[0];
+            if (last_trial.correct) {
+                return '<div style="font-size: 24px; color: green;"><p>✓ CORRECT! Press any key to continue.</p></div>';
+            } else {
+                return '<div style="font-size: 24px; color: red;"><p>✗ INCORRECT. The correct key was B for BLUE ink. Press any key to continue.</p></div>';
+            }
+        },
+        choices: ['Continue']
+    };
+
+    var practice_trial_3 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '<div style="font-size: 48px; color: yellow; font-weight: bold;">RED</div>',
+        choices: ['RED', 'GREEN', 'BLUE', 'YELLOW'],
+        button_html: (choice) => `<div style="border: 3px solid #333; width: 150px; height: 60px; margin: 20px; background-color: ${choice}; border-radius: 8px; cursor: pointer;">${choice}</div>`,
+        grid_rows: 2,
+        grid_columns: 2,
+        data: { task: 'practice', correct_response: 3, word: 'RED', color: 'yellow' },
+        on_finish: function (data) {
+            data.correct = (data.response === data.correct_response);
+        }
+    };
+
+    var practice_feedback_3 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function () {
+            var last_trial = jsPsych.data.get().last(1).values()[0];
+            if (last_trial.correct) {
+                return '<div style="font-size: 24px; color: green;"><p>✓ CORRECT! Press any key to continue.</p></div>';
+            } else {
+                return '<div style="font-size: 24px; color: red;"><p>✗ INCORRECT. The correct key was Y for YELLOW ink. Press any key to continue.</p></div>';
+            }
+        },
+        choices: ['Continue']
+    };
+
+    var practice_trial_4 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: '<div style="font-size: 48px; color: green; font-weight: bold;">YELLOW</div>',
+        choices: ['RED', 'GREEN', 'BLUE', 'YELLOW'],
+        button_html: (choice) => `<div style="border: 3px solid #333; width: 150px; height: 60px; margin: 20px; background-color: ${choice}; border-radius: 8px; cursor: pointer;">${choice}</div>`,
+        grid_rows: 2,
+        grid_columns: 2,
+        data: { task: 'practice', correct_response: 1, word: 'YELLOW', color: 'green' },
+        on_finish: function (data) {
+            data.correct = (data.response === data.correct_response);
+        }
+    };
+
+    var practice_feedback_4 = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function () {
+            var last_trial = jsPsych.data.get().last(1).values()[0];
+            if (last_trial.correct) {
+                return '<div style="font-size: 24px; color: green;"><p>✓ CORRECT! Press any key to continue.</p></div>';
+            } else {
+                return '<div style="font-size: 24px; color: red;"><p>✗ INCORRECT. The correct key was G for GREEN ink. Press any key to continue.</p></div>';
+            }
+        },
+        choices: ['Continue']
+    };
+
+    // Add to timeline individually
+    timeline.push(practice_trial_1);
+    timeline.push(practice_feedback_1);
+    timeline.push(practice_trial_2);
+    timeline.push(practice_feedback_2);
+    timeline.push(practice_trial_3);
+    timeline.push(practice_feedback_3);
+    timeline.push(practice_trial_4);
+    timeline.push(practice_feedback_4);
+
+    // --- Main Instructions ---
+    var practice_debrief = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+                <div class="instructions-container">
+                    <h2>Practice Complete!</h2>
+                    <p>Great job! You've finished the practice trials.</p>
+                    <p>Now you'll begin the main experiment.</p>
+                    <p>Remember:</p>
+                    <ul>
+                        <li>Respond to the <strong>ink color</strong>, not the word</li>
+                        <li>Be as fast and accurate as possible</li>
+                        <li>Tap the colored buttons for Red, Green, Blue, Yellow</li>
+                    </ul>
+                    <p>Press any key to start the main experiment.</p>
+                </div>
+            `,
+        choices: ['Start Experiment'],
+        post_trial_gap: 500
+    };
+    timeline.push(practice_debrief);
+    // --- Trial Generation Functions ---
+    var test = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function () {
+            var word = jsPsych.evaluateTimelineVariable('word');
+            var color = jsPsych.evaluateTimelineVariable('color');
+            return `<div style="font-size: 48px; color: ${color}; font-weight: bold;">${word}</div>`;
+        },
+        choices: ['RED', 'GREEN', 'BLUE', 'YELLOW'], // or whatever keys you want to use
+        button_html: (choice) => `<div style="border: 3px solid #333; width: 150px; height: 60px; margin: 20px; background-color: ${choice}; border-radius: 8px; cursor: pointer;">${choice}</div>`,
+        grid_rows: 2,
+        grid_columns: 2,
+        data: {
+            task: 'response',
+            word: jsPsych.timelineVariable('word'),
+            color: jsPsych.timelineVariable('color'),
+            correct_response: jsPsych.timelineVariable('correct_response'),
+            congruent: jsPsych.timelineVariable('congruent')
+        },
+        on_finish: function (data) {
+            data.correct = (data.response === data.correct_response);
+        }
+    };
+
+    // --- Main Trials ---
+    var test_procedure = {
+        timeline: [fixation, test], // Include fixation if desired
+        timeline_variables: test_stimuli,
+        sample: {
+            type: 'with-replacement',
+            size: 6
+        },
+    };
+    timeline.push(test_procedure);
+    // --- Debrief Function ---
+    /* define debrief */
+    var debrief_block = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: function () {
+
+            var trials = jsPsych.data.get().filter({ task: 'response' });
+            var correct_trials = trials.filter({ correct: true });
+
+            // Check if we have data
+            if (trials.count() === 0) {
+                return `<p>No trial data found. Press any key to see raw data.</p>`;
+            }
+
+            var congruent_trials = trials.filter({ congruent: true });
+            var incongruent_trials = trials.filter({ congruent: false });
+
+            var congruent_correct = congruent_trials.filter({ correct: true });
+            var incongruent_correct = incongruent_trials.filter({ correct: true });
+
+            var congruent_accuracy = congruent_trials.count() > 0 ? Math.round(congruent_correct.count() / congruent_trials.count() * 100) : 0;
+            var incongruent_accuracy = incongruent_trials.count() > 0 ? Math.round(incongruent_correct.count() / incongruent_trials.count() * 100) : 0;
+
+            var congruent_rt = congruent_correct.count() > 0 ? Math.round(congruent_correct.select('rt').mean()) : 0;
+            var incongruent_rt = incongruent_correct.count() > 0 ? Math.round(incongruent_correct.select('rt').mean()) : 0;
+
+            var stroop_effect = incongruent_rt - congruent_rt;
+
+            return `<div style="text-align: center;">
+      <h2>Experiment Complete!</h2>
+      <p><strong>Congruent trials:</strong> ${congruent_accuracy}% correct, ${congruent_rt}ms average</p>
+      <p><strong>Incongruent trials:</strong> ${incongruent_accuracy}% correct, ${incongruent_rt}ms average</p>
+      <p><strong>Stroop Effect:</strong> ${stroop_effect}ms</p>
+      <br>
+      <p>Press any key to see raw data. Thank you!</p>
+    </div>`;
+        },
+        choices: ['See Raw Data'],
+    };
+    timeline.push(debrief_block);
+
+    // --- Run Experiment ---
+    jsPsych.run(timeline);
+
+</script>
+
+</html>
