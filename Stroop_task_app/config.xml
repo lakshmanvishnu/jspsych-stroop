@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.example.jspsychapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>jsPsych App</name>
+    <description>A jsPsych experiment app</description>
+    <author email="dev@example.com" href="http://example.com">
+        jsPsych Developer
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="android-minSdkVersion" value="22" />
+    
+    <!-- Add this for file storage -->
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+    
+    <platform name="android">
+        <preference name="android-compileSdkVersion" value="35" />
+        <preference name="android-targetSdkVersion" value="34" />
+        
+        <!-- Android permissions are automatically added by the plugins -->
+        <!-- No need to manually add them here -->
+    </platform>
+    
+<platform name="ios">
+    <!-- iOS-specific settings -->
+    <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="AllowUntrustedCerts" value="true" />
+    <preference name="InterceptRemoteRequests" value="all" />
+    <preference name="allowFileAccessFromFileURLs" value="true" />
+    <preference name="allowUniversalAccessFromFileURLs" value="true" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    
+    <!-- Important for file access -->
+    <preference name="iosPersistentFileLocation" value="Library" />
+    <preference name="BackupWebStorage" value="local" />
+    
+    <!-- Allow access to external resources -->
+    <access origin="*" />
+    <allow-navigation href="*"/>
+</platform>
+</widget>

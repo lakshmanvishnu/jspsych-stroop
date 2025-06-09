@@ -1,0 +1,30 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-file": {
+      "ANDROIDX_WEBKIT_VERSION": "1.4.0",
+      "PACKAGE_NAME": "com.example.jspsychapp"
+    },
+    "cordova-plugin-badge": {
+      "PACKAGE_NAME": "com.example.jspsychapp"
+    },
+    "cordova-plugin-local-notification": {
+      "ANDROIDX_CORE_VERSION": "1.12.0",
+      "PACKAGE_NAME": "com.example.jspsychapp"
+    },
+    "cordova-plugin-wkwebview-file-xhr": {
+      "PACKAGE_NAME": "com.example.jspsychapp"
+    }
+  },
+  "dependent_plugins": {
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.example.jspsychapp"
+    }
+  }
+}
